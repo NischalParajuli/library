@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library - Available Books</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .welcome-info {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .user-info strong {
+            color: #667eea;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .book-card .author {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .book-card .genre {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #555;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        .book-card .availability {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .unavailable {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .borrow-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .borrow-btn:hover {
+            background: #764ba2;
+        }
+
+        .borrow-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .login-prompt {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .login-prompt p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .login-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .login-btn:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Library Management System</h1>
+            <p>Browse and borrow books from our collection</p>
+        </div>
+
+        {% if user.is_authenticated %}
+            <div class="welcome-info">
+                <div class="user-info">
+                    Welcome, <strong>{{ user.username }}</strong> ({{ user.role }})
+                </div>
+                <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h2 style="color: white; margin-bottom: 25px;">Available Books</h2>
+
+            {% if books %}
+                <div class="books-grid">
+                    {% for book in books %}
+                        <div class="book-card">
+                            <h3>{{ book.title }}</h3>
+                            <p class="author">by {{ book.author }}</p>
+                            <span class="genre">{{ book.genre }}</span>
+                            
+                            <div class="availability {% if book.is_available %}available{% else %}unavailable{% endif %}">
+                                {% if book.is_available %}
+                                    ✓ Available
+                                {% else %}
+                                    ✗ Unavailable
+                                {% endif %}
+                            </div>
+
+                            {% if book.is_available %}
+                                <form method="post" action="{% url 'borrow-book-form' %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="borrow-btn">Borrow This Book</button>
+                                </form>
+                            {% else %}
+                                <button class="borrow-btn" disabled>Currently Unavailable</button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+                    <p style="font-size: 1.2em; color: #666;">No books available at the moment.</p>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <div class="login-prompt">
+                <p>Please log in to borrow books</p>
+                <a href="{% url 'login' %}" class="login-btn">Go to Login</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Handle borrow form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const bookId = form.querySelector('input[name="book_id"]').value;
+                const button = form.querySelector('button');
+                
+                // Disable button while processing
+                button.disabled = true;
+                button.textContent = 'Borrowing...';
+                
+                // Get CSRF token
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                
+                try {
+                    const response = await fetch('/api/borrow/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: JSON.stringify({ book_id: bookId })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        alert('Book borrowed successfully! Due date: 7 days from now');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.error || data.detail || 'Could not borrow book'));
+                        button.disabled = false;
+                        button.textContent = 'Borrow This Book';
+                    }
+                } catch (error) {
+                    alert('Error borrowing book: ' + error.message);
+                    button.disabled = false;
+                    button.textContent = 'Borrow This Book';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

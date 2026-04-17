@@ -23,6 +23,24 @@ from datetime import timedelta
 class BorrowBookView(APIView):
     permission_classes = [IsMember]
 
+    def get(self, request):
+        # Show all available books that can be borrowed
+        available_books = Book.objects.filter(is_available=True)
+        books_data = []
+        for book in available_books:
+            books_data.append({
+                'id': book.id,
+                'title': book.title,
+                'author': book.author,
+                'genre': book.genre,
+                'book_no': book.book_no
+            })
+        return Response({
+            'available_books': books_data,
+            'total_available': len(books_data),
+            'message': 'Use POST with book_id to borrow a book'
+        })
+
     def post(self, request):
         user = request.user
         book_id = request.data.get('book_id')
