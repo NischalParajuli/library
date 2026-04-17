@@ -12,15 +12,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-import os 
+import os
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -29,25 +28,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True' 
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = []
 
+# Use custom User model from accounts app
 AUTH_USER_MODEL = 'accounts.User'
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'accounts',
-    'books',
-    'borrow',
-    'rest_framework',
-     'drf_yasg',
-     'django_filters', 
+    'django.contrib.admin',  # Django admin interface
+    'django.contrib.auth',  # Authentication system
+    'django.contrib.contenttypes',  # Content types framework
+    'django.contrib.sessions',  # Session framework
+    'django.contrib.messages',  # Messages framework
+    'django.contrib.staticfiles',  # Static files handling
+    'accounts',  # Custom accounts app
+    'books',  # Books management app
+    'borrow',  # Borrowing functionality app
+    'rest_framework',  # Django REST Framework
+    'drf_yasg',  # API documentation
+    'django_filters',  # Filtering for APIs
 ]
 
 MIDDLEWARE = [
@@ -116,18 +116,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT authentication
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication by default
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # Default pagination
+    'PAGE_SIZE': 10,  # Default page size
     'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',  # Enable filtering
     ],
 }
 
+# Swagger settings for API documentation
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {

@@ -1,10 +1,16 @@
+# Import admin for Django admin interface
 from django.contrib import admin
+# Import path and include for URL configuration
 from django.urls import path, include
+# Import JWT token views for authentication
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+# Import permissions for API schema
 from rest_framework import permissions
+# Import swagger view for API documentation
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+# Configure swagger schema view for API documentation
 schema_view = get_schema_view(
     openapi.Info(
         title="Library Management API",
@@ -16,16 +22,17 @@ schema_view = get_schema_view(
     authentication_classes=[],
 )
 
+# Main URL patterns for the project
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/accounts/', include('accounts.urls')),
-    path('api/books/', include('books.urls')),
-    path('api/borrow/', include('borrow.urls')),
+    path('admin/', admin.site.urls),  # Django admin interface
+    path('api/accounts/', include('accounts.urls')),  # User account endpoints
+    path('api/books/', include('books.urls')),  # Book management endpoints
+    path('api/borrow/', include('borrow.urls')),  # Borrowing endpoints
 
-    path('api/login/', TokenObtainPairView.as_view(), name='login'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh'),
+    path('api/login/', TokenObtainPairView.as_view(), name='login'),  # JWT login
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh'),  # JWT token refresh
 
-    # Swagger URLs
+    # Swagger API documentation URLs
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
 ]

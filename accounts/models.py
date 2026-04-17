@@ -10,6 +10,5 @@ class User(AbstractUser):
         ('admin', 'Admin'),
         ('member', 'Member'),
     )
-
     # Role field to distinguish between admin and member users
     role = models.CharField(max_length=20, choices=ROLE_CHOICES,)
