@@ -12,6 +12,8 @@ from .models import Book
 from .serializer import BookSerializer
 # Import pagination
 from .pagination import BookPagination
+from django.shortcuts import render
+
 
 # BookViewSet for CRUD operations on Book model
 class BookViewSet(viewsets.ModelViewSet):
@@ -29,3 +31,11 @@ class BookViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAdmin()]
         return [IsAuthenticated()]   
+
+
+def landing(request):
+    return render(request,'landing.html')
+    
+
+
+

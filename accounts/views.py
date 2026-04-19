@@ -1,11 +1,7 @@
-# Import APIView for custom API views
 from rest_framework.views import APIView
-# Import Response and status for API responses
 from rest_framework.response import Response
 from rest_framework import status
-# Import permissions
 from rest_framework.permissions import AllowAny
-# Import User model and serializer
 from .models import User
 from .serializer import UserSerializer
 # Import swagger decorator for API documentation

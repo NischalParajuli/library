@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 # Load environment variables from .env file
 load_dotenv()
@@ -94,6 +95,14 @@ DATABASES = {
  }
 
 }
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # or timedelta(days=9999)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
 
 
 # Password validation

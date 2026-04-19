@@ -22,7 +22,7 @@ from datetime import timedelta
 # View for borrowing a book
 class BorrowBookView(APIView):
     permission_classes = [IsMember]
-
+    
     def get(self, request):
         # Show all available books that can be borrowed
         available_books = Book.objects.filter(is_available=True)
@@ -98,7 +98,7 @@ class BorrowHistoryView(generics.ListAPIView):
     serializer_class = BorrowRecordSerializer
     pagination_class = BorrowPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['status', 'due_date']
+    filterset_fields = ['status', 'due_date','user']
     search_fields = ['user__username', 'book__title']
 
     def get_permissions(self):

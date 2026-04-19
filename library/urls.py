@@ -9,6 +9,7 @@ from rest_framework import permissions
 # Import swagger view for API documentation
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from books.views import landing
 
 # Configure swagger schema view for API documentation
 schema_view = get_schema_view(
@@ -25,6 +26,7 @@ schema_view = get_schema_view(
 # Main URL patterns for the project
 urlpatterns = [
     path('admin/', admin.site.urls),  # Django admin interface
+    path('',landing,name = 'landing'),
     path('api/accounts/', include('accounts.urls')),  # User account endpoints
     path('api/books/', include('books.urls')),  # Book management endpoints
     path('api/borrow/', include('borrow.urls')),  # Borrowing endpoints
