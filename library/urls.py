@@ -1,17 +1,12 @@
-# Import admin for Django admin interface
 from django.contrib import admin
-# Import path and include for URL configuration
 from django.urls import path, include
-# Import JWT token views for authentication
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-# Import permissions for API schema
 from rest_framework import permissions
 # Import swagger view for API documentation
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from books.views import landing
 
-# Configure swagger schema view for API documentation
 schema_view = get_schema_view(
     openapi.Info(
         title="Library Management API",
